@@ -1,4 +1,4 @@
-# ECG_detedt_OSA
+# ECG_detect_OSA
 
 ------------------------------------------
 This program is designed to recognize **Obstructive sleep apnea**. Using I²C connect MAX86150 with ARC EM9D board GMA303KU on board and Convolutional Neural Networks to recognize these diease.
@@ -33,6 +33,7 @@ All hardware are in the picture following:
 -  OLED1306
 
 All hardware are in the picture following:
+
 <img width="450" alt="PC2" src="https://user-images.githubusercontent.com/87894572/176450960-a8cc7ce9-5fe4-49f3-83ad-ed625e810ab7.png">
 
 
@@ -50,11 +51,25 @@ All hardware are in the picture following:
 
 ### Compatible Model
 
-1. Download [LSTM-Human-Activity-Recognition](https://github.com/guillaume-chevalier/LSTM-Human-Activity-Recognition)
+1. Download [Apnea-ECG Database](https://physionet.org/content/apnea-ecg/1.0.0/)
 
-1. Give the **avaliable dataset** which LSTM-Human-Activity-Recognition model wants
+1. Give the **Apnea-ECG Database** which held Computers contest with Cardiology in 2000.
 
-1. Use **Tensorflow 1.x** and **Python 3.7** to training model
+1. Use **Tensorflow 2.x** and **Python 3.7 up** to training model
+
+1. Import module to read Apnea-ECG Database
+
+```python
+import wfdb
+```
+
+```python
+
+```
+
+```python
+
+```
 
 ### UART send 3-axis accelerometer
 
