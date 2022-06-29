@@ -71,11 +71,11 @@ import wfdb
 
 ```
 
-### UART send 3-axis accelerometer
+### I²C transport MAX86150
 
-1. Open workshop/himax_tflm/Synopsys_WEI/Example_Project/Lab2_accelerometer do UART Serial Transport
+1. Open workshop/Synopsys_SDK_V22/Example_Project/Lab2_I2C_OLED do I²C Serial Transport.
 
-1. Then refer to workshop/himax_tflm/Synopsys_WEI/Example_Project/Lab1_gpio use GPIO simulation Tx and Rx
+1. Open workshop/Synopsys_SDK_V22/Example_Project/Lab2_I2C_Accelerometer do I²C Serial Transport.
 
 
 ```cpp
