@@ -9,7 +9,7 @@ This program is designed to recognize **Obstructive sleep apnea**. Using I²C co
 	* [Required Software](#required-software)
 	* [Hardware Connection](#hardware-connection)
 * [User Manual](#user-manual)
-	* [Compatible Model](#compatible-model)
+	* [Initial each I/O](#Initial-each-I/O)
 	* [UART send 3-axis accelerometer](#UART-send-3-axis-accelerometer)
 	* [UART recieve 3-axis accelerometer](#UART-recieve-3-axis-accelerometer)
 	* [Training Model](#Training-Model)
@@ -63,7 +63,7 @@ All hardware are in the picture following:
 import wfdb
 ```
 
-### Initial each I/O.
+### Initial each I/O
 
 - Open workshop/Synopsys_SDK_V22/Example_Project/Lab2_I2C_OLED to know I²C Serial Transport.
 
