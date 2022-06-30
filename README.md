@@ -371,8 +371,108 @@ history = model_ecg.fit(x_train,
                         validation_split=0.1,
                         callbacks=[mcp_ecg])
 ```
-
+- Plot accuracy and loss
 ```python
+loss = history.history['loss']
+val_loss = history.history['val_loss']
+
+acc=history.history['accuracy']
+val_acc=history.history['val_accuracy']
+
+plt.figure(figsize=(6,12))
+
+plt.subplot(2,1,1)
+
+plt.xlabel('Epochs')
+plt.ylabel('Loss')
+plt.plot(loss, 'blue', label='Training Loss')
+plt.plot(val_loss, 'green', label='Validation Loss')
+plt.xticks(range(0,epochs)[0::100])
+plt.title('Training and Validation Loss vs Epochs')
+plt.legend()
+
+plt.subplot(2,1,2)
+
+plt.xlabel('Epochs')
+plt.ylabel('Accuracy')
+plt.plot(acc, 'blue', label='Training Accuracy')
+plt.plot(val_acc, 'green', label='Validation Accuracy')
+plt.xticks(range(0,epochs)[0::100])
+plt.title('Training and Validation Accuracy vs Epochs')
+plt.legend()
+plt.savefig("plots_perf.svg")
+plt.show()
+```
+- Check our confusion matrix 
+```python
+model_ecg.load_weights('best_weights_ecg_32layer.hdf5')
+y_pred = model_ecg.predict(x_test)
+predict_test=np.argmax(y_pred, axis=1)
+predict_test=predict_test.reshape(predict_test.shape[0],1)
+cm=confusion_matrix(y_test_num, predict_test)
+cm
+```
+- Check test data accuracy
+```python
+(cm[1,1]+cm[0,0])/(cm[1,1]+cm[1,0]+cm[0,0]+cm[0,1])
+```
+- Save module and weight
+```python
+model_ecg.save_weights('model_weights.h5')
+model_ecg.save('model_weights.h5')
+```
+- Convert 'h5' file to 'tflite' file
+```python
+import tensorflow as tf
+model = tf.keras.models.load_model('model_weights.h5')
+converter = tf.lite.TFLiteConverter.from_keras_model(model_ecg)
+tflite_model = converter.convert()
+converter.inference_input_type, converter.inference_output_type
+import pathlib
+generated_dir = pathlib.Path("generated/")
+generated_dir.mkdir(exist_ok=True, parents=True)
+converted_model_file = generated_dir/"ecg_model.tflite"
+converted_model_file.write_bytes(tflite_model)  
+```
+- Check 'tflite' file's accuracy
+```python
+import tensorflow as tf
+max_samples = 17233
+converted_model_file="generated/ecg_model.tflite"
+interpreter = tf.lite.Interpreter(model_path=str(converted_model_file))
+interpreter.allocate_tensors()
+
+# A helper function to evaluate the TF Lite model using "test" dataset.
+def evaluate_model(interpreter):
+    input_index = interpreter.get_input_details()[0]["index"]
+    output_index = interpreter.get_output_details()[0]["index"]
+    scale, zero_point = interpreter.get_output_details()[0]['quantization']
+
+    prediction_values = []
+    
+    for test_image in x_test[:max_samples]:
+        # Pre-processing: add batch dimension, quantize and convert inputs to int8 to match with
+        # the model's input data format.
+        test_image = np.expand_dims(test_image, axis=0) #.astype(np.float32)
+        test_image = np.float32(test_image)
+        interpreter.set_tensor(input_index, test_image)
+
+        interpreter.invoke()
+
+        # Find the letter with highest probability
+        output = interpreter.tensor(output_index)
+        result = np.argmax(output()[0])
+        prediction_values.append(result)
+    
+    accurate_count = 0
+    for index in range(len(prediction_values)):
+        if prediction_values[index] == y_test[index]:
+            accurate_count += 1
+    accuracy = accurate_count * 1.0 / len(prediction_values)
+    return accuracy * 100
+
+print(str(evaluate_model(interpreter)) + "%")
 ```
 ```python
+
 ```
