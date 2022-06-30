@@ -3,6 +3,8 @@
 ------------------------------------------
 This program is designed to recognize **Obstructive sleep apnea**. Using I²C connect MAX86150 with ARC EM9D board GMA303KU on board and Convolutional Neural Networks to recognize these diease.
 
+<img width="450" alt="PC2" src="https://user-images.githubusercontent.com/87894572/176604629-1e02e3cf-c78f-47bf-a87c-b511c30e8c5f.png">
+
 * [Introduction](#introduction)
 * [Hardware and Software Setup](#hardware-and-software-setup)
 	* [Required Hardware](#required-hardware)
