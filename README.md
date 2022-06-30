@@ -14,6 +14,7 @@ This program is designed to recognize **Obstructive sleep apnea**. Using I²C co
 	* [Compatible Model](#compatible-model)
 	* [Initial each device](#initial-each-device)
 	* [Loading dataset and pre-processing](#loading-dataset-and-pre-processing)
+	* [Setup model](#setup-model)
 	
 
 
