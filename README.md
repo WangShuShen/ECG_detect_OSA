@@ -71,7 +71,7 @@ import wfdb
 
 ```
 
-### I²C transport ECG data to MAX86150.
+### Initial each I/O.
 
 1. Open workshop/Synopsys_SDK_V22/Example_Project/Lab2_I2C_OLED to know I²C Serial Transport.
 
@@ -124,7 +124,7 @@ int main(void)
 1. Initial MAX86150 to send ECG data.
 
 
-```cpp
+```c
 void InitMax86150(void){
     InitI2C();
     uint8_t initial_data_write[8][2] = { 
@@ -140,6 +140,61 @@ void InitMax86150(void){
         Max86150_WriteData(initial_data_write[i][0], initial_data_write[i][1]);
     }
     board_delay_ms(500);
+        OLED_Init();
+
+	OLED_Clear();                        
+	OLED_SetCursor(0, 0);
+    OLED_DisplayString("Welcome To ARC EVK");
+
+	OLED_SetCursor(1, 0);
+	for(oled_i = 0; oled_i < 128; oled_i ++)
+		oledSendData(oled_i);
+}
+```
+1. Initial OLED1306 to show result.
+```c
+OLED_Init();
+
+OLED_Clear();                        
+OLED_SetCursor(0, 0);
+OLED_DisplayString("Welcome To ARC EVK");
+
+OLED_SetCursor(1, 0);
+for(oled_i = 0; oled_i < 128; oled_i ++)
+	oledSendData(oled_i);
+```
+
+1. Initial OLED1306 to show result.
+```c
+int16_t accel_x;
+int16_t accel_y;
+int16_t accel_z;
+int16_t accel_t;
+
+uint8_t xg_sign;
+uint8_t yg_sign;
+uint8_t zg_sign;
+uint8_t temp_sign;
+
+int16_t xg_10x;
+int16_t yg_10x;
+int16_t zg_10x;
+int16_t temp_10x;
+int main(){
+
+    //your code
+     iic1_ptr = hx_drv_i2cm_get_dev(USE_SS_IIC_0);
+    iic1_ptr->iic_open(DEV_MASTER_MODE, IIC_SPEED_STANDARD); 
+    uint8_t chip_id = GMA303KU_Init();
+    board_delay_ms(100);
+
+    if(chip_id == 0xA3)
+        sprintf(uart_buf, "Chip ID: 0x%2X | OK\r\n\n", chip_id);    //It should be 0xA3
+    else 
+        sprintf(uart_buf, "Chip ID: 0x%2X | Error\r\n\n", chip_id);    //It should be 0xA3
+    uart0_ptr->uart_write(uart_buf, strlen(uart_buf));
+    board_delay_ms(10);
+    //your code
 }
 ```
 1. Find delay time `hal_delay_ms(7);` to match bluetooth module's **baud rate 115200**
