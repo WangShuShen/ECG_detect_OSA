@@ -41,6 +41,7 @@ All hardware are in the picture following:
 - Metaware or ARC GNU Toolset
 - Serial port terminal, such as putty, tera-term or minicom
 - VirtualBox(Ubuntu 20.04)
+- Cygwin64 Terminal
 
 ### Hardware Connection
 - ARC EM9D, MAX861150 and OLED1306 connected by wire.
@@ -473,6 +474,8 @@ def evaluate_model(interpreter):
 
 print(str(evaluate_model(interpreter)) + "%")
 ```
-```python
-
+- Open **Cygwin64 Terminal** press command
+```c
+xxd -i model.tflite > model.h
 ```
+And you get .h file to put in ARC EM9D
