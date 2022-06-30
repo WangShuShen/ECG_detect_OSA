@@ -73,7 +73,7 @@ import wfdb
 
 ### Initial each I/O.
 
-1. Open workshop/Synopsys_SDK_V22/Example_Project/Lab2_I2C_OLED to know I²C Serial Transport.
+- Open workshop/Synopsys_SDK_V22/Example_Project/Lab2_I2C_OLED to know I²C Serial Transport.
 
 ```c
 #include <stdio.h>
@@ -121,7 +121,7 @@ int main(void)
     //code
  }
 ```
-1. Initial MAX86150 to send ECG data.
+- Initial MAX86150 to send ECG data.
 
 
 ```c
@@ -151,7 +151,7 @@ void InitMax86150(void){
 		oledSendData(oled_i);
 }
 ```
-1. Initial OLED1306 to show result.
+- Initial OLED1306 to show result.
 ```c
 OLED_Init();
 
@@ -164,7 +164,7 @@ for(oled_i = 0; oled_i < 128; oled_i ++)
 	oledSendData(oled_i);
 ```
 
-1. Initial OLED1306 to show result.
+- Initial GMA303KU to send 3-axis acceleration.
 ```c
 int16_t accel_x;
 int16_t accel_y;
