@@ -10,10 +10,6 @@ This program is designed to recognize **Obstructive sleep apnea**. Using I²C co
 	* [Hardware Connection](#hardware-connection)
 * [User Manual](#user-manual)
 	* [Initial each device](#initial-each-device)
-	* [UART send 3-axis accelerometer](#uart-send-3-axis-accelerometer)
-	* [UART recieve 3-axis accelerometer](#uart-recieve-3-axis-accelerometer)
-	* [Training Model](#training-Model)
-	* [Put realtime 3-axis accelerometer observing result](#put-realtime-3-axis-accelerometer-observing-result)
 
 
 ## Introduction
@@ -35,9 +31,6 @@ All hardware are in the picture following:
 All hardware are in the picture following:
 
 <img width="450" alt="PC2" src="https://user-images.githubusercontent.com/87894572/176450960-a8cc7ce9-5fe4-49f3-83ad-ed625e810ab7.png">
-
-
-
 
 ### Required Software
 - Metaware or ARC GNU Toolset
@@ -189,30 +182,6 @@ int main(){
     //your code
 }
 ```
-
-
-### UART recieve 3-axis accelerometer
-
-- Open Jupyter Notebook compile these code down
-
-```cpp
-from time import sleep
-import serial
-ser =serial.Serial("COM12", 115200,timeout=0.0835,writeTimeout=1) 
-Arduino_cmd='8'
-cmd=Arduino_cmd.encode("utf-8")
-ser.write(cmd)
-ser.flushInput()
-sleep(0.06) 
-while(1):
-    
-    
-    rv=ser.read(12)
-    print(rv)
-ser.flushInput()
-ser.close()
-```
-- Check recieving result
 ### Loading dataset & pre-processing
 - Includes module
 ```python
