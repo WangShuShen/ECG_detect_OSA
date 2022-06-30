@@ -71,32 +71,76 @@ import wfdb
 
 ```
 
-### I²C transport MAX86150
+### I²C transport ECG data to MAX86150.
 
-1. Open workshop/Synopsys_SDK_V22/Example_Project/Lab2_I2C_OLED do I²C Serial Transport.
+1. Open workshop/Synopsys_SDK_V22/Example_Project/Lab2_I2C_OLED to know I²C Serial Transport.
 
-1. Open workshop/Synopsys_SDK_V22/Example_Project/Lab2_I2C_Accelerometer do I²C Serial Transport.
+```c
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include "embARC.h"
+#include "embARC_debug.h"
+#include "board_config.h"
+#include "arc_timer.h"
+#include "hx_drv_spi_s.h"
+#include "spi_slave_protocol.h"
+#include "hardware_config.h"
+
+#include "hx_drv_iic_m.h"
+#include "synopsys_i2c_oled1306.h"
+
+#include "hx_drv_uart.h"
+#define uart_buf_size 100
+
+#define USE_SS_IIC_X USE_SS_IIC_1
+
+DEV_UART *uart0_ptr;
+char uart_buf[uart_buf_size] = {0};
+
+DEV_IIC *iic1_ptr;
+int main(void)
+{
+    // UART 0 is already initialized with 115200bps
+    printf("This is Lab2_I2C_OLED\r\n");
+
+    uart0_ptr = hx_drv_uart_get_dev(USE_SS_UART_0);
+
+    sprintf(uart_buf, "I2C0 Init\r\n");
+    uart0_ptr->uart_write(uart_buf, strlen(uart_buf));
+    board_delay_ms(10);
+
+    iic1_ptr = hx_drv_i2cm_get_dev(USE_SS_IIC_1);
+    iic1_ptr->iic_open(DEV_MASTER_MODE, IIC_SPEED_FAST);
+    
+    //I2C read
+    hx_drv_i2cm_read_data(USE_SS_IIC_X, GMA303KU_ADDRESS, read_buf, read_len);
+    //I2C write
+    a = hx_drv_i2cm_write_data(USE_SS_IIC_X, 0xbc, &data_write[0], 0, &data_write[0], 2); 
+    
+    //code
+ }
+```
+1. Initial MAX86150 to send ECG data.
 
 
 ```cpp
-#include "hx_drv_tflm.h"
-#include "synopsys_wei_delay.h"
-#include "synopsys_wei_gpio.h"
-#define accel_scale 10
-#define accel_scale1 100
-void GPIO_INIT(void);
-void UART_T(float x,float y,float z);
-void UART_R(void);
-hx_drv_gpio_config_t hal_gpio_0;
-hx_drv_gpio_config_t hal_gpio_1;
-hx_drv_gpio_config_t hal_led_r;
-hx_drv_gpio_config_t hal_led_g;
-//your code
-void GPIO_INIT(void);
-//your code
-hal_gpio_set(&hal_gpio_0, GPIO_PIN_RESET); //For hardware hal_gpio_0 connect to bluetooth module's TX
-hal_gpio_set(&hal_gpio_1, GPIO_PIN_RESET); //For hardware hal_gpio_1 connect to bluetooth module's RX
-//your code
+void InitMax86150(void){
+    InitI2C();
+    uint8_t initial_data_write[8][2] = { 
+                                         {0x02, 0x80}, //Interrupt Enable 1
+                                         {0x03, 0x04}, //Interrupt Enable 2
+                                         {0x08, 0x10}, //FIFO Configuration 
+                                         {0x09, 0x09}, //FIFO Data Control Register 1
+                                         {0x0a, 0x00}, //FIFO Data Control Register 2
+                                         {0x3c, 0x03}, //ECG Configuration 1   //0x02   0x03
+                                         {0x3e, 0x00}, //ECG Configuration 3    //0x0D  0x00
+                                         {0x0d, 0x04}}; //System Control; 
+    for(int i = 0; i < 8; i++){
+        Max86150_WriteData(initial_data_write[i][0], initial_data_write[i][1]);
+    }
+    board_delay_ms(500);
+}
 ```
 1. Find delay time `hal_delay_ms(7);` to match bluetooth module's **baud rate 115200**
 
