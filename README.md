@@ -63,14 +63,6 @@ All hardware are in the picture following:
 import wfdb
 ```
 
-```python
-
-```
-
-```python
-
-```
-
 ### Initial each I/O.
 
 - Open workshop/Synopsys_SDK_V22/Example_Project/Lab2_I2C_OLED to know I²C Serial Transport.
@@ -197,11 +189,7 @@ int main(){
     //your code
 }
 ```
-1. Find delay time `hal_delay_ms(7);` to match bluetooth module's **baud rate 115200**
 
-1. Open Tera Term then burn **output_gnu.img**
-
-1. Last,press **reset button** sending 3-axis accelerometer
 
 ### UART recieve 3-axis accelerometer
 
@@ -225,36 +213,138 @@ ser.flushInput()
 ser.close()
 ```
 - Check recieving result
-### Training Model
-- All Includes
-```cpp
+### Loading dataset & pre-processing
+- Includes module
+```python
+import wfdb
 import numpy as np
-import matplotlib
+import tensorflow
+from tensorflow.keras.callbacks import ModelCheckpoint
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Flatten, BatchNormalization,Dropout
+from tensorflow.keras.layers import Conv2D, MaxPooling2D
+from tensorflow.keras.regularizers import l2
+import sklearn
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
-import tensorflow as tf
-from sklearn import metrics
-import os
 ```
 
-- Useful Constants
+- Load testing dataset
 
-```cpp
-INPUT_SIGNAL_TYPES = [
-    "body_acc_x_",
-    "body_acc_y_",
-    "body_acc_z_",
-]
-# Output classes to learn how to classify
-LABELS = [
-    "WALKING", 
-    "WALKING_UPSTAIRS", 
-    "WALKING_DOWNSTAIRS", 
-    "SITTING", 
-    "STANDING", 
-    "LAYING"
-] 
+```python
+adr =1
+if adr ==1:
+ change_link='/content/drive/MyDrive/CNN/ECG_model/sleep_apena_detect/apnea-ecg-database-1.0.0/'
+elif adr == 2:
+  change_link='/content/drive/MyDrive/ecg_data/apnea-ecg-database-1.0.0/'
+
+x_test=[]
+y_test=[]
+
+test_string=['x01','x02','x03','x04','x05','x06','x07','x08','x09','x10','x11','x12',
+             'x13','x14','x15','x16','x17','x18','x19','x20','x21','x22','x23','x24',
+             'x25','x26','x27','x28','x29','x30','x31','x32','x33','x34','x35']
+
+             
+test_label_count=[522,468,464,481,504,449,508,516,507,509,456,526,505,489,497,514,399,458,486,
+                  512,509,481,526,428,509,519,497,494,469,510,556,537,472,474,482]
+
+test_label=np.loadtxt(change_link+'test-dataset-annos.txt',delimiter='\t',dtype=np.str)
+
+
+
+tmp=[]
+
+for i in test_label:
+    tmp+=list(i)
+
+
+for i in range(len(tmp)):
+    if tmp[i]=='N':
+        tmp[i]=0
+    else:
+        tmp[i]=1
+y_test=np.array(tmp,dtype=np.int8)
+
+count=0
+for k in test_string:
+    record = wfdb.rdrecord(record_name=change_link+k,return_res=16,physical=True)
+    ecg_signal = record.p_signal
+    ecg_signal=np.delete(ecg_signal,np.s_[((test_label_count[count])*6000):])
+    x_test=np.append(x_test,ecg_signal)
+    x_test = x_test.astype(np.float32)
+    count+=1
 ```
+- Load training dataset
+```python
+x_train=[]
+y_train=[]
+list_string=['a01','a02','a03','a04','a05','a06','a07','a08','a09','a10','a11','a12',
+             'a13','a14','a15','a16','a17','a18','a19','a20','b01','b02','b03','b04',
+             'b05','c01','c02','c03','c04','c05','c06','c07','c08','c09','c10']
 
+for k in list_string:
+
+    record = wfdb.rdrecord(record_name=change_link+k,return_res=16,physical=True)
+    ann = wfdb.rdann(change_link+k,'apn')
+
+    ecg_signal_label=ann.symbol
+    ecg_signal_label=np.array(ecg_signal_label)
+
+    ecg_signal = record.p_signal
+
+
+    ecg_signal=np.delete(ecg_signal,np.s_[((len(ecg_signal_label)-1)*6000):])
+    x_train=np.append(x_train,ecg_signal)
+    x_train = x_train.astype(np.float32)
+
+    for i in range(len(ecg_signal_label)):
+        if ecg_signal_label[i]=='N':
+            ecg_signal_label[i]=0
+        else:
+            ecg_signal_label[i]=1
+    ecg_signal_label=np.array(ecg_signal_label,dtype=np.int8)
+    ecg_signal_label=np.delete(ecg_signal_label,np.s_[(len(ecg_signal_label)-1):])
+    y_train=np.append(y_train,ecg_signal_label)
+```
+- Merge two dataset in one
+```python
+tmp_data=np.append(x_train,x_test,)
+tmp_label=np.append(y_train,y_test)
+```
+- Dataset normalization
+```python
+tmp_data_max_abs=np.max(np.abs(tmp_data))
+print(tmp_data)
+tmp_data=tmp_data/tmp_data_max_abs
+print(tmp_data)
+```
+- Split dataset
+```python
+tmp_data=np.reshape(tmp_data,(int(tmp_data.size/6000),6000,1,1))
+
+x_train, x_test, y_train, y_test = train_test_split(tmp_data, tmp_label, test_size=0.1)
+x_train.shape,y_train.shape ,x_test.shape , y_test.shape
+```
+- Flatten Label
+```python
+y_train = y_train.flatten()
+y_test = y_test.flatten()
+```
+- Encoder Label
+```python
+num_classes=2
+y_train_encoder = sklearn.preprocessing.LabelEncoder()
+y_train_num = y_train_encoder.fit_transform(y_train)
+y_train_wide = tensorflow.keras.utils.to_categorical(y_train_num, num_classes)
+y_test_num = y_train_encoder.fit_transform(y_test)
+y_test_wide = tensorflow.keras.utils.to_categorical(y_test_num, num_classes)
+```
+```python
+```
+```python
+```
 - Preparing dataset
 
 <img width="800" alt="image" src="https://user-images.githubusercontent.com/87894572/126873949-ebe2d658-df40-4cb2-8f57-ba96a8fc3cb8.png">
