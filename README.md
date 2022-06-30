@@ -11,7 +11,10 @@ This program is designed to recognize **Obstructive sleep apnea**. Using I²C co
 	* [Required Software](#required-software)
 	* [Hardware Connection](#hardware-connection)
 * [User Manual](#user-manual)
+	* [Compatible Model](#compatible-model)
 	* [Initial each device](#initial-each-device)
+	* [Loading dataset and pre-processing](#loading-dataset-and-pre-processing)
+	
 
 
 ## Introduction
@@ -184,7 +187,7 @@ int main(){
     //your code
 }
 ```
-### Loading dataset & pre-processing
+### Loading dataset and pre-processing
 - Includes module
 ```python
 import wfdb
