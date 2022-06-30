@@ -9,11 +9,11 @@ This program is designed to recognize **Obstructive sleep apnea**. Using I²C co
 	* [Required Software](#required-software)
 	* [Hardware Connection](#hardware-connection)
 * [User Manual](#user-manual)
-	* [Initial each I/O](#Initial-each-I/O)
-	* [UART send 3-axis accelerometer](#UART-send-3-axis-accelerometer)
-	* [UART recieve 3-axis accelerometer](#UART-recieve-3-axis-accelerometer)
-	* [Training Model](#Training-Model)
-	* [Put realtime 3-axis accelerometer observing result](#Put-realtime-3-axis-accelerometer-observing-result)
+	* [Initial each I/O](#initial-each-i/o)
+	* [UART send 3-axis accelerometer](#uart-send-3-axis-accelerometer)
+	* [UART recieve 3-axis accelerometer](#uart-recieve-3-axis-accelerometer)
+	* [Training Model](#training-Model)
+	* [Put realtime 3-axis accelerometer observing result](#put-realtime-3-axis-accelerometer-observing-result)
 
 
 ## Introduction
@@ -341,7 +341,35 @@ y_train_wide = tensorflow.keras.utils.to_categorical(y_train_num, num_classes)
 y_test_num = y_train_encoder.fit_transform(y_test)
 y_test_wide = tensorflow.keras.utils.to_categorical(y_test_num, num_classes)
 ```
+### Setup model
+- Use 2D CNN to deal with this problem
 ```python
+model_ecg = Sequential()
+
+model_ecg.add(BatchNormalization(input_shape=(6000,1,1)))
+
+model_ecg.add(Conv2D(8,kernel_size=(2,1),padding="same", activation='relu',strides=2,kernel_regularizer=l2(0.001), bias_regularizer=l2(0.001)))
+model_ecg.add(Conv2D(8,kernel_size=(2,1),padding="same", activation='relu',strides=2,kernel_regularizer=l2(0.001), bias_regularizer=l2(0.001)))
+model_ecg.add(MaxPooling2D(pool_size=(2,1),padding="same"))
+
+model_ecg.add(Conv2D(16,kernel_size=(2,1),padding="same", activation='relu',strides=2,kernel_regularizer=l2(0.001), bias_regularizer=l2(0.001)))
+model_ecg.add(Conv2D(16,kernel_size=(2,1),padding="same", activation='relu',strides=2,kernel_regularizer=l2(0.001), bias_regularizer=l2(0.001)))
+model_ecg.add(MaxPooling2D(pool_size=(2,1),padding="same"))
+
+model_ecg.add(Conv2D(32,kernel_size=(2,1),padding="same", activation='relu',strides=2,kernel_regularizer=l2(0.001), bias_regularizer=l2(0.001)))
+model_ecg.add(Conv2D(32,kernel_size=(2,1),padding="same", activation='relu',strides=2,kernel_regularizer=l2(0.001), bias_regularizer=l2(0.001)))
+model_ecg.add(MaxPooling2D(pool_size=(2,1),padding="same"))
+
+model_ecg.add(Dropout(0.5))
+
+model_ecg.add(BatchNormalization())
+model_ecg.add(Flatten())
+model_ecg.add(Dropout(0.5))
+
+model_ecg.add(Dense(64,activation='relu'))
+model_ecg.add(Dense(2,kernel_regularizer=l2(0.01), bias_regularizer=l2(0.01),activation='softmax'))
+
+model_ecg.summary()
 ```
 ```python
 ```
