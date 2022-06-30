@@ -12,9 +12,11 @@ This program is designed to recognize **Obstructive sleep apnea**. Using I²C co
 	* [Hardware Connection](#hardware-connection)
 * [User Manual](#user-manual)
 	* [Compatible Model](#compatible-model)
-	* [Initial each device](#initial-each-device)
-	* [Loading dataset and pre-processing](#loading-dataset-and-pre-processing)
-	* [Setup model](#setup-model)
+	* [C work on board](#c-work-on-board)
+		* [Initial each device](#initial-each-device)
+	* [Python work for deep learning](#python-work-for-deep-learning)
+		* [Loading dataset and pre-processing](#loading-dataset-and-pre-processing)
+		* [Setup model](#setup-model)
 	
 
 
@@ -62,8 +64,8 @@ All hardware are in the picture following:
 ```python
 import wfdb
 ```
-
-### Initial each device
+### C work on board
+#### Initial each device
 
 - Open workshop/Synopsys_SDK_V22/Example_Project/Lab2_I2C_OLED to know I²C Serial Transport.
 
@@ -189,7 +191,8 @@ int main(){
     //your code
 }
 ```
-### Loading dataset and pre-processing
+### Python work for deep learning
+#### Loading dataset and pre-processing
 - Includes module
 ```python
 import wfdb
@@ -317,7 +320,7 @@ y_train_wide = tensorflow.keras.utils.to_categorical(y_train_num, num_classes)
 y_test_num = y_train_encoder.fit_transform(y_test)
 y_test_wide = tensorflow.keras.utils.to_categorical(y_test_num, num_classes)
 ```
-### Setup model
+#### Setup model
 - Use 2D CNN to deal with this problem
 ```python
 model_ecg = Sequential()
