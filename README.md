@@ -857,5 +857,16 @@ int main(void)
 
 <img width="450" alt="PC2" src="https://user-images.githubusercontent.com/87894572/177011723-c1305a32-e574-4d0e-8410-0d62cdd290f4.png">
 
+- Wearable device put on user
+
+<img width="450" alt="PC2" src="https://user-images.githubusercontent.com/87894572/177012463-0b1d368c-bbdb-49de-b6ba-c01ba39a95b7.png">
+
+- User lay on bed
+
+
+<img width="450" alt="PC2" src="https://user-images.githubusercontent.com/87894572/177012511-0394668e-4695-45f6-a9cc-9d16ae9c3891.png">
+
+
 - Demo
+
 Youtube link:
