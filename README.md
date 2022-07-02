@@ -435,8 +435,9 @@ const char kCategoryLabels[kCategoryCount] = { 'N', 'Y', };
 ```
 
 #### GMA303KU part
-- GMA303KU is same with Example project
+- GMA303KU is same as Example project
 #### Main fuction
+- Main fuction is to controle all I/O.
 ```c
 /**************************************************************************************************
     (C) COPYRIGHT, Himax Technologies, Inc. ALL RIGHTS RESERVED
@@ -540,15 +541,8 @@ int main(void)
 
 	return 0;
 }
+```
 
-
-```
-```cpp
-```
-```cpp
-```
-```cpp
-```
 ### Python work for deep learning
 #### Loading dataset and pre-processing
 - Includes module
