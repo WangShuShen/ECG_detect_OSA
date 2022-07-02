@@ -21,7 +21,7 @@ This program is designed to recognize **Obstructive sleep apnea**. Using I²C co
 
 
 ## Introduction
-- 1 We use 3-axis accelerometer to determine user whether is go to sleep.
+- 1 Using 3-axis accelerometer to determine user whether is go to sleep.
 - 2 Using I²C to trasport ECG data to ARC EM9D board.
 - 3 Using Convolutional Neural Networks model to recognize real time ECG data.
 - 4 Show the result to user.
@@ -67,7 +67,7 @@ import wfdb
 ### C work on board
 #### OLED1306 part
 
-- Open "synopsys_i2c_oled1306.c" and copy code
+- Open "synopsys_i2c_oled1306.c" and copy this code below you will see display on OLED1306.
 
 ```c
 /********************************************************************************
@@ -244,7 +244,7 @@ void DisplayAHI(int num){
 }
 ```
 #### MAX86150 part
-- Create max86150.c file to send ECG data.
+- Create max86150.c file, in order to send ECG data.
 ```c
 #include "max86150.h"
 
@@ -401,7 +401,7 @@ void ReadRegister(void){
 	micro_op_resolver.AddSoftmax();
 	micro_op_resolver.AddRelu();
 ```
-- Add tflitemicro algo
+- Add tflitemicro algo.
 ```cpp
 extern "C" int tflitemicro_algo_run(float * ECGData)
 {
@@ -429,15 +429,15 @@ extern "C" int tflitemicro_algo_run(float * ECGData)
 ```
 
 #### Model setting
-- Open model_settings.cpp, and change label.
+- Open model_settings.cpp and change label.
 ```cpp
 const char kCategoryLabels[kCategoryCount] = { 'N', 'Y', };
 ```
 
 #### GMA303KU part
-- GMA303KU is same as Example project
+- GMA303KU is same as "workshop/Synopsys_SDK_V22/Example_Project/Lab2_I2C_Accelerometer\src".
 #### Main fuction
-- Main fuction is to controle all I/O.
+- Main fuction control all I/O and 3-axis accelerater.
 ```c
 /**************************************************************************************************
     (C) COPYRIGHT, Himax Technologies, Inc. ALL RIGHTS RESERVED
