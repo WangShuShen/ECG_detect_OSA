@@ -92,11 +92,9 @@ import matplotlib.pyplot as plt
 - Load testing dataset
 
 ```python
-adr =1
-if adr ==1:
- change_link='/content/drive/MyDrive/CNN/ECG_model/sleep_apena_detect/apnea-ecg-database-1.0.0/'
-elif adr == 2:
-  change_link='/content/drive/MyDrive/ecg_data/apnea-ecg-database-1.0.0/'
+#Add "apena-database-1.0.0"location in "change_link"
+
+change_link=''
 
 x_test=[]
 y_test=[]
