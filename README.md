@@ -8,7 +8,7 @@ This program is designed to recognize **Obstructive Sleep Apnea**. Using I²C co
 * [Introduction](#introduction)
 * [Hardware and Software Setup](#hardware-and-software-setup)
 	* [Required Hardware](#required-hardware)
-	* [Hardware Connection](#hardware-connection)
+		* [Hardware Connection](#hardware-connection)
 	* [Required Software](#required-software)
 * [User Manual](#user-manual)
 	* [Compatible Model](#compatible-model)
