@@ -8,8 +8,9 @@ This program is designed to recognize **Obstructive Sleep Apnea**. Using I²C co
 * [Introduction](#introduction)
 * [Hardware and Software Setup](#hardware-and-software-setup)
 	* [Required Hardware](#required-hardware)
-	* [Required Software](#required-software)
 	* [Hardware Connection](#hardware-connection)
+	* [Required Software](#required-software)
+	
 * [User Manual](#user-manual)
 	* [Compatible Model](#compatible-model)
 	* [Python work for deep learning](#python-work-for-deep-learning)
@@ -47,14 +48,14 @@ All hardware are in the picture following:
 
 <img width="450" alt="PC2" src="https://user-images.githubusercontent.com/87894572/177003623-f2245325-a6d2-4a58-b78f-5beda8a00746.png">
 
+### Hardware Connection
+- ARC EM9D, MAX861150 and OLED1306 connected by wire.
+
 ### Required Software
 - Metaware or ARC GNU Toolset
 - Serial port terminal, such as putty, tera-term or minicom
 - VirtualBox(Ubuntu 20.04)
 - Cygwin64 Terminal
-
-### Hardware Connection
-- ARC EM9D, MAX861150 and OLED1306 connected by wire.
 
 ## User Manual
 
