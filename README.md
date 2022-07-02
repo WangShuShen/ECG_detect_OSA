@@ -773,14 +773,12 @@ int main(void)
 {    
     //UART 0 is already initialized with 115200bps
 
-    //Model initial
 	tflitemicro_algo_init();
     uint8_t chip_id = GMA303KU_Init();
     board_delay_ms(100);
 
-    //OLED initial
     OLED_Init();    
-    OLED_Clear();                        
+    OLED_Clear();
 	OLED_SetCursor(0, 0);
 
     if(chip_id == 0xA3)
@@ -790,7 +788,6 @@ int main(void)
     board_delay_ms(10);
 
     while(1){
-        //Read 3-axis acceleration
         uint16_t reg_04_data = GMA303KU_Get_Data(&accel_x, &accel_y, &accel_z, &accel_t);
 
         if(accel_z < -350 ){
@@ -800,33 +797,42 @@ int main(void)
         board_delay_ms(100);
     }
 
-    uint8_t c, y = 0;
-    c += 1;
+    int hr, min, yes = 0;
 
-    //Max86150 initial
     InitUART();
     InitMax86150();
 
     while (1)
     {
-        //Load real-time ecg data into model
         int index;
         GetECGloop(ECG);
         index = tflitemicro_algo_run(ECG);
         DisplayResult(kCategoryLabels[index]);
         if(kCategoryLabels[index] == 'Y'){
-            y += 1;
+            yes += 1;
         }
-
-        c += 1;
-        if((c - 1) == MaxCounter){
-            board_delay_ms(5000);
-            DisplayAHI(y);
+        min += 1;
+        uint16_t reg_04_data = GMA303KU_Get_Data(&accel_x, &accel_y, &accel_z, &accel_t);
+        if(accel_z > -350 ){
             break;
         }
     }
+
+
+    int AHI;
+    if(min % 60 != 0){
+        hr = (min / 60) + 1;
+    }
+    else{
+        hr = (min / 60);
+    }
+    AHI = yes / hr;
+    DisplayAHI(AHI);
+
 	return 0;
 }
+
+
 ```
 
 ## Final Product Introduction
