@@ -401,6 +401,33 @@ void ReadRegister(void){
 	micro_op_resolver.AddSoftmax();
 	micro_op_resolver.AddRelu();
 ```
+- Add tflitemicro algo
+```cpp
+extern "C" int tflitemicro_algo_run(float * ECGData)
+{
+	int ercode = 0;
+
+ 	float Nor = 1;
+    for (int i = 0; i < kImageSize; i ++) 
+      input->data.f[i] = ( *(ECGData + i * 2) ) / Nor;
+
+	TfLiteStatus invoke_status = interpreter->Invoke();
+
+	if(invoke_status != kTfLiteOk)
+	{
+		error_reporter->Report("invoke fail\n");
+	}
+	
+	float* results_ptr = output->data.f;
+    int result = std::distance(results_ptr, std::max_element(results_ptr, results_ptr + 2));
+	
+	
+	ercode = result;
+
+	return ercode;
+}
+```
+
 #### Model setting
 - Open model_settings.cpp, and change label.
 ```cpp
@@ -409,7 +436,111 @@ const char kCategoryLabels[kCategoryCount] = { 'N', 'Y', };
 
 #### GMA303KU part
 - GMA303KU is same with Example project
+#### Main fuction
 ```c
+/**************************************************************************************************
+    (C) COPYRIGHT, Himax Technologies, Inc. ALL RIGHTS RESERVED
+    ------------------------------------------------------------------------
+    File        : main.c
+    Project     : WEI
+    DATE        : 2018/10/01
+    AUTHOR      : 902452
+    BRIFE       : main function
+    HISTORY     : Initial version - 2018/10/01 created by Will
+    			: V1.0			  - 2018/11/13 support CLI
+**************************************************************************************************/
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include "embARC.h"
+#include "embARC_debug.h"
+#include "board_config.h"
+#include "arc_timer.h"
+#include "hx_drv_spi_s.h"
+#include "spi_slave_protocol.h"
+#include "hardware_config.h"
+
+#include "hx_drv_uart.h"
+
+#include "tflitemicro_algo.h"
+#include "model_settings.h"
+#include "max86150.h"
+#include "synopsys_i2c_oled1306.h"
+#include "synopsys_sdk_GMA303KU.h"
+
+
+#define MaxCounter 60
+
+int16_t accel_x;
+int16_t accel_y;
+int16_t accel_z;
+int16_t accel_t;
+
+float ECG[MAX] = {0};
+
+
+int main(void)
+{    
+    //UART 0 is already initialized with 115200bps
+
+    //Model initial
+	tflitemicro_algo_init();
+    uint8_t chip_id = GMA303KU_Init();
+    board_delay_ms(100);
+
+    //OLED initial
+    OLED_Init();    
+    OLED_Clear();                        
+	OLED_SetCursor(0, 0);
+
+    if(chip_id == 0xA3)
+        DisplayResult('R');
+    else
+        OLED_DisplayString("GMA303KU_Init Error");
+    board_delay_ms(10);
+
+    while(1){
+        //Read 3-axis acceleration
+        uint16_t reg_04_data = GMA303KU_Get_Data(&accel_x, &accel_y, &accel_z, &accel_t);
+
+        if(accel_z < -350 ){
+            DisplayResult('N');
+            break;
+        }
+        board_delay_ms(100);
+    }
+
+    uint8_t c, y = 0;
+    c += 1;
+
+    //Max86150 initial
+    InitUART();
+    InitMax86150();
+
+    while (1)
+    {
+        //Load real-time ecg data into model
+        int index;
+        GetECGloop(ECG);
+        index = tflitemicro_algo_run(ECG);
+        DisplayResult(kCategoryLabels[index]);
+        if(kCategoryLabels[index] == 'Y'){
+            y += 1;
+        }
+
+        c += 1;
+        if((c - 1) == MaxCounter){
+            board_delay_ms(5000);
+            DisplayAHI(y);
+            break;
+        }
+    }
+
+
+
+	return 0;
+}
+
 
 ```
 ```cpp
