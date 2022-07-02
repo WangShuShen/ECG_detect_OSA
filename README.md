@@ -838,3 +838,11 @@ int main(void)
 ## Final Project Introduction
 - Project outward
 <img width="450" alt="PC2" src="https://user-images.githubusercontent.com/87894572/177011186-f15199a4-1ed1-45a5-90d2-f44c48f13ead.png">
+- Project feature
+1. OCED1306 display "sleep" : ARC EM9D is in waiting state untill lay down go through sleeping status.
+<img width="450" alt="PC2" src="https://user-images.githubusercontent.com/87894572/177011286-ce2bf7a2-0ddd-49c0-b9c9-1b2725b0595a.png">
+2. OCED1306 display a heart with a "√" sign : Model dectect normal breathe per minutes.
+<img width="450" alt="PC2" src="https://user-images.githubusercontent.com/87894572/177011474-24226c2c-7766-41c2-99ea-aa935e16ae91.png">
+3. OCED1306 display a heart with a "X" sign : Model dectect sleep apnena per minutes.
+<img width="450" alt="PC2" src="https://user-images.githubusercontent.com/87894572/177011627-4b93ba0d-799e-4b24-96f9-8e2e77bb78cb.png">
+- Demo
