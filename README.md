@@ -10,7 +10,6 @@ This program is designed to recognize **Obstructive Sleep Apnea**. Using I²C co
 	* [Required Hardware](#required-hardware)
 	* [Hardware Connection](#hardware-connection)
 	* [Required Software](#required-software)
-	
 * [User Manual](#user-manual)
 	* [Compatible Model](#compatible-model)
 	* [Python work for deep learning](#python-work-for-deep-learning)
@@ -770,7 +769,7 @@ const char kCategoryLabels[kCategoryCount] = { 'N', 'Y', };
 #include "synopsys_sdk_GMA303KU.h"
 
 
-#define MaxCounter 60
+#define MaxCounter 480
 
 int16_t accel_x;
 int16_t accel_y;
