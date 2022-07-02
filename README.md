@@ -243,6 +243,7 @@ void DisplayAHI(int num){
     }
 }
 ```
+#### MAX86150 part
 - Create max86150.c file to send ECG data.
 ```c
 #include "max86150.h"
@@ -386,13 +387,9 @@ void ReadRegister(void){
 
 
 ```
-- GMA303KU is same with Example project
-- 
-```c
 
-```
-#### Project programming
--Open tflitemicro_algo.cpp, put layers we have in model.
+#### Tflitemicro algo
+- Open tflitemicro_algo.cpp, put layers we have in model.
 ```cpp
 	static tflite::MicroMutableOpResolver<8> micro_op_resolver;
 	micro_op_resolver.AddMul();
@@ -404,11 +401,17 @@ void ReadRegister(void){
 	micro_op_resolver.AddSoftmax();
 	micro_op_resolver.AddRelu();
 ```
--Open model_settings.cpp, and change label.
+#### Model setting
+- Open model_settings.cpp, and change label.
 ```cpp
 const char kCategoryLabels[kCategoryCount] = { 'N', 'Y', };
 ```
 
+#### GMA303KU part
+- GMA303KU is same with Example project
+```c
+
+```
 ```cpp
 ```
 ```cpp
