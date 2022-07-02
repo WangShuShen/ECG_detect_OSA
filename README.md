@@ -203,8 +203,12 @@ int main(){
 	micro_op_resolver.AddMaxPool2D();
 	micro_op_resolver.AddSoftmax();
 	micro_op_resolver.AddRelu();
-	// micro_op_resolver.AddMaxPool2D(
 ```
+-Open model_settings.cpp, and change label.
+```cpp
+const char kCategoryLabels[kCategoryCount] = { 'N', 'Y', };
+```
+
 ```cpp
 ```
 ```cpp
