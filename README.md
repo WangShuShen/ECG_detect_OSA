@@ -835,4 +835,6 @@ int main(void)
 
 ```
 
-## Final Product Introduction
+## Final Project Introduction
+- Project outward
+<img width="450" alt="PC2" src="https://user-images.githubusercontent.com/87894572/177011186-f15199a4-1ed1-45a5-90d2-f44c48f13ead.png">
