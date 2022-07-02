@@ -23,8 +23,7 @@ This program is designed to recognize **Obstructive Sleep Apnea**. Using I²C co
 		* [Model setting](#model-setting)
 		* [GMA303KU part](#gma303ku-part)
 		* [Main fuction](#main-fuction)
-
-	
+	* [Final Product Introduction](#final-product-introduction)
 
 
 ## Introduction
@@ -60,13 +59,11 @@ All hardware are in the picture following:
 
 ### Compatible Model
 
-1. Download [Apnea-ECG Database](https://physionet.org/content/apnea-ecg/1.0.0/)
+1. Download [Apnea-ECG Database](https://physionet.org/content/apnea-ecg/1.0.0/).
 
-1. Give the **Apnea-ECG Database** which held Computers contest with Cardiology in 2000.
+1. Use **Tensorflow 2.x** and **Python 3.7 up** to training model.
 
-1. Use **Tensorflow 2.x** and **Python 3.7 up** to training model
-
-1. Import module to read Apnea-ECG Database
+1. Import module to read **Apnea-ECG Database**.
 
 ```python
 import wfdb
@@ -102,20 +99,16 @@ y_test=[]
 test_string=['x01','x02','x03','x04','x05','x06','x07','x08','x09','x10','x11','x12',
              'x13','x14','x15','x16','x17','x18','x19','x20','x21','x22','x23','x24',
              'x25','x26','x27','x28','x29','x30','x31','x32','x33','x34','x35']
-
              
 test_label_count=[522,468,464,481,504,449,508,516,507,509,456,526,505,489,497,514,399,458,486,
                   512,509,481,526,428,509,519,497,494,469,510,556,537,472,474,482]
 
 test_label=np.loadtxt(change_link+'test-dataset-annos.txt',delimiter='\t',dtype=np.str)
 
-
-
 tmp=[]
 
 for i in test_label:
     tmp+=list(i)
-
 
 for i in range(len(tmp)):
     if tmp[i]=='N':
@@ -677,14 +670,11 @@ void ReadRegister(void){
     buffer[count][3] = Overflow;
     buffer[count][4] = read_point;
 
-    
     if(count % 2 == 0){
         Max86150_ReadData(0x07, 3, &read_buf[0]);
     }
     count += 1;
 }
-
-
 ```
 
 #### Tflitemicro algo
@@ -838,3 +828,5 @@ int main(void)
 	return 0;
 }
 ```
+
+## Final Product Introduction
