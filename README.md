@@ -48,7 +48,7 @@ All hardware are in the picture following:
 
 ### Hardware Connection
 - ARC EM9D, MAX861150 and OLED1306 connected by wire.
-
+123
 ### Required Software
 - Metaware or ARC GNU Toolset
 - Serial port terminal, such as putty, tera-term or minicom
