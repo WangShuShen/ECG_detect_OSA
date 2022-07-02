@@ -260,7 +260,6 @@ void DisplayAHI(int num){
 #define uart_buf_size 100
 
 char uart_buf[uart_buf_size] = {0};
-uint8_t Tobin_buf[8] = {0};
 uint8_t buffer[MAX][bytes] = {0};
 uint8_t read_buf[20] = {0};
 DEV_IIC * iic1_ptr;
@@ -315,80 +314,7 @@ void Max86150_WriteData(uint8_t addr, uint8_t data){
     hx_drv_i2cm_write_data(USE_SS_IIC_X, MAX86150_Address, &WriteData[0], 0, &WriteData[0], 2); 
 }
 
-
-//Change int8 into Byte
-void uint8_tTobin_1Byte(uint8_t data){
-    uint8_t buf;
-    for(int i = 7; i >= 0; i--)
-    {
-        buf = 128;
-        for(int j = 7; j > i; j--){
-            buf = buf / 2;
-        }
-        Tobin_buf[i] = (data & buf) >> i;
-    }
-        
-}
-
-//Display ecg data on Tera Term
-void DisplayData(char base, int data, char Text[], uint8_t WordDisplay){
-    switch (WordDisplay)
-    {
-    case 0:{
-        switch (base)
-        {
-        case 'B':{
-            uint8_tTobin_1Byte(data);
-            sprintf(uart_buf, "%d%d%d%d %d%d%d%d\r\n",  Tobin_buf[7], Tobin_buf[6], Tobin_buf[5], Tobin_buf[4],
-                                                        Tobin_buf[3], Tobin_buf[2], Tobin_buf[1], Tobin_buf[0]);
-            break;
-        }
-        case 'D':{
-            sprintf(uart_buf, "%d\r\n", data);
-            break;
-        }
-        case 'H':{
-            sprintf(uart_buf, "%x\r\n", data);
-            break;
-        }  
-        default:
-            sprintf(uart_buf, "base: Bin or Dec or Hex\r\n");
-            break;
-        }
-        break;
-    }
-
-    case 1:{
-        switch (base)
-        {
-        case 'B':{
-            uint8_tTobin_1Byte(data);
-            sprintf(uart_buf, "%s：%d%d%d%d %d%d%d%d\r\n", Text, Tobin_buf[7], Tobin_buf[6], Tobin_buf[5], Tobin_buf[4],
-                                                         Tobin_buf[3], Tobin_buf[2], Tobin_buf[1], Tobin_buf[0]);
-            break;
-        }
-        case 'D':{
-            sprintf(uart_buf, "%s：%d\r\n", Text, data);
-            break;
-        }
-        case 'H':{
-            sprintf(uart_buf, "%s：%x\r\n", Text, data);
-            break;
-        }  
-        default:
-            sprintf(uart_buf, "base: Bin or Dec or Hex\r\n");
-            break;
-        }
-        break;
-    }
-    default:
-        sprintf(uart_buf, "WordDisplay: 0 or 1\r\n");
-        break;
-    }
-    uart0_ptr->uart_write(uart_buf, strlen(uart_buf));
-
-}
-
+//Read ECG from Max86150
 void GetECG(float * data){
     uint8_t write_point;
 
@@ -468,23 +394,6 @@ void ReadRegister(void){
     count += 1;
 }
 
-void RestRead(void){
-    uint8_t Interrupt1, Interrupt2, write_point, OverFlow, read_point;
-    Max86150_ReadData(0x00, 1, &read_buf[0]);
-    while (1)
-    {
-        Max86150_ReadData(0x07, 3, &read_buf[0]);
-        Max86150_ReadData(0x05, 1, &read_buf[0]);
-        OverFlow = read_buf[0];
-        if(OverFlow != 0x1f){
-            for (int i = 0; i < 31; i++)
-            {
-                Max86150_ReadData(0x07, 3, &read_buf[0]);
-            }
-            break;
-        }
-    }
-}
 
 ```
 - GMA303KU is same with Example project
