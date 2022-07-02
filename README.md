@@ -118,15 +118,6 @@ uint8_t MarkLocation[MarNUM][2] ={
 
 uint8_t MarkData = 0xff;
 
-void DisplayExclamationMark(void){
-    for(int j = 0; j < MarNUM; j++){
-        OLED_SetCursor(MarkLocation[j][0], MarkLocation[j][1]);
-        for(int i = 0; i < FONT_SIZE; i++)
-            oledSendData(MarkData);
-        oledSendData(0x00);
-    }
-}
-
 void DisplayResult(char result){
     OLED_Clear();
     switch (result)
@@ -250,7 +241,6 @@ void DisplayAHI(int num){
         OLED_SetCursor(7, 54);
         OLED_DisplayString("NO OSA");
     }
-
 }
 ```
 - Create max86150.c file to send ECG data.
