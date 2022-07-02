@@ -244,7 +244,7 @@ void DisplayAHI(int num){
 }
 ```
 #### MAX86150 part
-- Create max86150.c file, in order to send ECG data.
+- Create "max86150.c" file, in order to send ECG data.
 ```c
 #include "max86150.h"
 
@@ -389,7 +389,7 @@ void ReadRegister(void){
 ```
 
 #### Tflitemicro algo
-- Open tflitemicro_algo.cpp, put layers we have in model.
+- Open "tflitemicro_algo.cpp", put layers we have in model.
 ```cpp
 	static tflite::MicroMutableOpResolver<8> micro_op_resolver;
 	micro_op_resolver.AddMul();
@@ -435,7 +435,7 @@ const char kCategoryLabels[kCategoryCount] = { 'N', 'Y', };
 ```
 
 #### GMA303KU part
-- GMA303KU is same as "workshop/Synopsys_SDK_V22/Example_Project/Lab2_I2C_Accelerometer\src".
+- GMA303KU is same as "workshop/Synopsys_SDK_V22/Example_Project/Lab2_I2C_Accelerometer/src/synopsys_sdk_GMA303KU.c".
 #### Main fuction
 - Main fuction control all I/O and 3-axis accelerater.
 ```c
