@@ -192,7 +192,25 @@ int main(){
 }
 ```
 #### Project programming
-
+-Open tflitemicro_algo.cpp, put layers we have in model.
+```cpp
+	static tflite::MicroMutableOpResolver<8> micro_op_resolver;
+	micro_op_resolver.AddMul();
+	micro_op_resolver.AddAdd();
+	micro_op_resolver.AddConv2D();
+	micro_op_resolver.AddFullyConnected();
+	micro_op_resolver.AddReshape();
+	micro_op_resolver.AddMaxPool2D();
+	micro_op_resolver.AddSoftmax();
+	micro_op_resolver.AddRelu();
+	// micro_op_resolver.AddMaxPool2D(
+```
+```cpp
+```
+```cpp
+```
+```cpp
+```
 ### Python work for deep learning
 #### Loading dataset and pre-processing
 - Includes module
