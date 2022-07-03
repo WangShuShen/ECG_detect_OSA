@@ -616,22 +616,22 @@ void GetECG(float * data){
     }
 
     for(int i = 0; i < NumAvailableSamples; i++){
-            Max86150_ReadData(0x07, 3, &read_buf[0]);
+       Max86150_ReadData(0x07, 3, &read_buf[0]);
  
-            int buf = ((read_buf[0] << 16) | (read_buf[1] << 8) | read_buf[2]) & 0x3ffff;
+       int buf = ((read_buf[0] << 16) | (read_buf[1] << 8) | read_buf[2]) & 0x3ffff;
           
-            if(buf > 0x20000){
-                buf -= 0x20000;
-                buf = -1 * (0x1ffff - buf + 1);
-            }
+       if(buf > 0x20000){
+          buf -= 0x20000;
+          buf = -1 * (0x1ffff - buf + 1);
+       }
 
-            data[count] = buf;
+       data[count] = buf;
 
-            count += 1;
-            if(count == MAX)
-            {
-                break;
-            }
+       count += 1;
+       if(count == MAX)
+       {
+            break;
+       }
     }
     read = write_point;
 }
@@ -694,26 +694,23 @@ void ReadRegister(void){
 ```cpp
 extern "C" int tflitemicro_algo_run(float * ECGData)
 {
-	int ercode = 0;
+    int ercode = 0;
 
- 	float Nor = 1;
+    float Nor = 1;
     for (int i = 0; i < kImageSize; i ++) 
       input->data.f[i] = ( *(ECGData + i * 2) ) / Nor;
 
-	TfLiteStatus invoke_status = interpreter->Invoke();
+    TfLiteStatus invoke_status = interpreter->Invoke();
 
-	if(invoke_status != kTfLiteOk)
-	{
-		error_reporter->Report("invoke fail\n");
-	}
+    if(invoke_status != kTfLiteOk)
+    {
+	error_reporter->Report("invoke fail\n");
+    }
 	
-	float* results_ptr = output->data.f;
+    float* results_ptr = output->data.f;
     int result = std::distance(results_ptr, std::max_element(results_ptr, results_ptr + 2));
-	
-	
-	ercode = result;
-
-	return ercode;
+    ercode = result;
+    return ercode;
 }
 ```
 
@@ -772,14 +769,13 @@ float ECG[MAX] = {0};
 int main(void)
 {    
     //UART 0 is already initialized with 115200bps
-
-	tflitemicro_algo_init();
+    tflitemicro_algo_init();
     uint8_t chip_id = GMA303KU_Init();
     board_delay_ms(100);
 
     OLED_Init();    
     OLED_Clear();
-	OLED_SetCursor(0, 0);
+    OLED_SetCursor(0, 0);
 
     if(chip_id == 0xA3)
         DisplayResult('R');
@@ -818,7 +814,6 @@ int main(void)
         }
     }
 
-
     int AHI;
     if(min % 60 != 0){
         hr = (min / 60) + 1;
@@ -831,8 +826,6 @@ int main(void)
 
 	return 0;
 }
-
-
 ```
 
 ## Final Project Introduction
@@ -863,9 +856,7 @@ int main(void)
 
 - User lay on bed
 
-
 <img width="450" alt="PC2" src="https://user-images.githubusercontent.com/87894572/177012511-0394668e-4695-45f6-a9cc-9d16ae9c3891.png">
-
 
 - Demo
 
